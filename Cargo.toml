@@ -1,6 +1,6 @@
 [package]
 name = "transparent_proxy"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "A proxy server to run in front of password-protected socks5 servers to be able to connect to the proxy without password using clients which does not support password auth"
 license = "GPL-2.0"
