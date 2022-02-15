@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>Label</key>
+	<string>com.nefthias.transparent_proxy</string>
+	<key>UserName</key>
+    <string>root</string>
+	<key>Program</key>
+	<string>/usr/local/bin/transparent_proxy</string>
+	<key>ProgramArguments</key>
+	<array>
+		<string>/usr/local/bin/transparent_proxy</string>
+		<string>-h</string>
+		<string>127.0.0.1</string>
+		<string>-P</string>
+		<string>55000</string>
+		<string>-t</string>
+		<string>proxy.example.com:6789</string>
+		<string>-u</string>
+		<string>'example uname'</string>
+		<string>-p</string>
+		<string>'example password'</string>
+	</array>
+	<key>RunAtLoad</key>
+	<true/>
+	<key>StandardOutPath</key>
+	<string>/var/log/com.nefthias.transparent_proxy.log</string>
+	<key>StandardErrorPath</key>
+	<string>/var/log/com.nefthias.transparent_proxy.log</string>
+	<key>KeepAlive</key>
+	<dict>
+		<key>SuccessfulExit</key>
+		<false/>
+	</dict>
+</dict>
+</plist>
+
+
+
