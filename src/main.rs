@@ -3,7 +3,7 @@ use std::process::exit;
 use structopt::StructOpt;
 
 use tokio::net::TcpListener;
-use transparent_proxy::Flags;
+use transparent_proxy::{Flags, TargetType};
 #[tokio::main]
 async fn main()
 {
@@ -14,15 +14,27 @@ async fn main()
 		eprintln!("username is required when password is provided or vice versa");
 		exit(1);
 	}
-	println!("{:?}", flags);
+	println!("{:#?}", flags);
 	let listener = TcpListener::bind((flags.host, flags.port)).await.unwrap();
 	while let Ok((sock, addr)) = listener.accept().await {
 		let flags = flags.clone();
-		tokio::spawn(async move {
-			println!("new conn from {addr}");
-			if let Err(e) = transparent_proxy::socks::handle_client(sock, flags).await {
-				eprintln!("{}", e);
+		match flags.target_type {
+			TargetType::Socks5 => {
+				tokio::spawn(async move {
+					println!("new socks5 conn from {addr}");
+					if let Err(e) = transparent_proxy::socks::handle_client(sock, flags).await {
+						eprintln!("{}", e);
+					}
+				});
 			}
-		});
+			TargetType::Http => {
+				tokio::spawn(async move {
+					println!("new http conn from {addr}");
+					if let Err(e) = transparent_proxy::http::handle_client(sock, flags).await {
+						eprintln!("{}", e);
+					}
+				});
+			}
+		}
 	}
 }

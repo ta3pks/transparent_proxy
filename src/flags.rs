@@ -1,4 +1,7 @@
-use std::net::{IpAddr, SocketAddr, ToSocketAddrs};
+use std::{
+	net::{IpAddr, SocketAddr, ToSocketAddrs},
+	str::FromStr,
+};
 
 use structopt::StructOpt;
 
@@ -28,4 +31,27 @@ pub struct Flags
 	pub password: Option<String>,
 	#[structopt(short, long,parse(try_from_str = resolve_sock_addr))]
 	pub target_addr: SocketAddr,
+	#[structopt(short = "T", long, default_value = "socks5")]
+	/// socks5, http
+	pub target_type: TargetType,
+}
+#[derive(Debug, Clone)]
+pub enum TargetType
+{
+	Socks5,
+	Http,
+}
+impl FromStr for TargetType
+{
+	type Err = String;
+	fn from_str(s: &str) -> Result<Self, Self::Err>
+	{
+		match s {
+			"socks5" => Ok(TargetType::Socks5),
+			"http" => Ok(TargetType::Http),
+			_ => Err(format!(
+				"invalid target type: {s}\nValid types: socks5, http"
+			)),
+		}
+	}
 }
