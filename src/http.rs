@@ -33,9 +33,12 @@ pub async fn handle_client(
 		.write_all(format!("{first_line}\r\n{auth_line}\r\n").as_bytes())
 		.await?;
 	let (mut server_reader, mut server_writer) = server.split();
-	let (_, _) = tokio::join!(
+	let res = tokio::try_join!(
 		tokio::io::copy(&mut reader, &mut server_writer),
 		tokio::io::copy(&mut server_reader, &mut writer)
 	);
-	unimplemented!()
+	if cfg!(debug_assertions) {
+		eprintln!("{res:?}");
+	}
+	Ok(())
 }
