@@ -37,21 +37,12 @@ pub async fn handle_client(
 		_ => return Err("unsupported auth method".into()),
 	}
 	disregard_negotiations_of_client(&mut client).await?;
-	let (mut client_read, mut client_write) = client.into_split();
-	let (mut server_read, mut server_write) = server.into_split();
-	tokio::spawn(async move {
-		tokio::io::copy(&mut client_read, &mut server_write)
-			.await
-			.ok();
-		dbg!("client_read finished");
-	});
-	tokio::spawn(async move {
+	let (mut client_read, mut client_write) = client.split();
+	let (mut server_read, mut server_write) = server.split();
+	let (_, _) = tokio::join!(
+		tokio::io::copy(&mut client_read, &mut server_write),
 		tokio::io::copy(&mut server_read, &mut client_write)
-			.await
-			.ok();
-		dbg!("server_read finished");
-	});
-
+	);
 	Ok(())
 }
 async fn disregard_negotiations_of_client(client: &mut TcpStream) -> Result<(), Box<dyn Error>>
