@@ -10,6 +10,17 @@ repository = "https://github.com/NikosEfthias/transparent_proxy"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+base64 = { version = "0.13.0", optional = true }
 structopt = "0.3.26"
 tap = "1.0.1"
-tokio = { version = "1.16.1", features = ["full"] }
+tokio = { version = "1.16.1", features = [
+  "rt",
+  "macros",
+  "net",
+  "rt-multi-thread",
+  "io-util",
+] }
+[features]
+default = ["http", "socks5"]
+http = ["base64"]
+socks5 = []
