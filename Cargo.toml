@@ -11,6 +11,7 @@ repository = "https://github.com/NikosEfthias/transparent_proxy"
 
 [dependencies]
 base64 = { version = "0.13.1", optional = true }
+fastrand = "1.8.0"
 structopt = "0.3.26"
 tap = "1.0.1"
 tokio = { version = "1.22.0", features = [
