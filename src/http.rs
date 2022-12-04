@@ -15,7 +15,10 @@ pub async fn handle_client(
         "Proxy-Authorization: Basic {}\r\n",
         base64::encode(&format!(
             "{}:{}",
-            flags.username.unwrap_or_default(),
+            flags
+                .username
+                .unwrap_or_default()
+                .replace("%R", fastrand::u32(0..u32::MAX).to_string().as_str()),
             flags.password.unwrap_or_default()
         ))
     );

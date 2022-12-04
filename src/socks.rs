@@ -28,7 +28,11 @@ pub async fn handle_client(
             //password auth
             handle_password_auth(
                 &mut server,
-                flags.username.unwrap_or_default().as_str(),
+                flags
+                    .username
+                    .unwrap_or_default()
+                    .replace("%R", fastrand::u32(0..u32::MAX).to_string().as_str())
+                    .as_str(),
                 flags.password.unwrap_or_default().as_str(),
             )
             .await?;
