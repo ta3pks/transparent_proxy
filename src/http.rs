@@ -1,5 +1,6 @@
 use std::{error::Error, io::ErrorKind};
 
+use tap::Tap;
 use tokio::{
     io::{AsyncBufReadExt, AsyncWriteExt, BufReader},
     net::TcpStream,
@@ -18,7 +19,8 @@ pub async fn handle_client(
             flags
                 .username
                 .unwrap_or_default()
-                .replace("%R", fastrand::u32(0..u32::MAX).to_string().as_str()),
+                .replace("%R", fastrand::u32(0..u32::MAX).to_string().as_str())
+                .tap_dbg(|s| println!("username: {}", s)),
             flags.password.unwrap_or_default()
         ))
     );
